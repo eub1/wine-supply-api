@@ -9,6 +9,8 @@ mongoose
 	.connect(process.env.MONGO_URL!)
 	.then(() => {
 		console.log(`Listening on port ${PORT}`);
+		console.log("New clog");
+
 		app.listen(PORT);
 	})
 	.catch((error) => {
