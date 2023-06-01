@@ -34,7 +34,7 @@ router.put("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         if (Object.keys(req.body).length) {
             for (const property in querys) {
-                wine[property] = querys[property];
+                wine[property] = req.body[property];
             }
         }
         if (((_a = req.files) === null || _a === void 0 ? void 0 : _a.images) && imageID) {
@@ -46,7 +46,7 @@ router.put("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             yield fs_extra_1.default.unlink(req.files.images.tempFilePath);
             wine.images = [
                 result.secure_url,
-                result.public_id //Id de la imagen
+                result.public_id, //Id de la imagen
             ];
         }
         else {

@@ -14,7 +14,7 @@ const updatedUser = (user, body) => __awaiter(void 0, void 0, void 0, function* 
     //  console.log(body);
     const validate = body.name || body.lastName || body.userName || body.email || body.date_of_birth || body.phone || body.avatar || body.isActive || body.avatar ? true : false;
     if (!validate)
-        return ("no valid field for update");
+        throw new Error("no valid field for update");
     for (const property in body) {
         user[property] = body[property];
     }

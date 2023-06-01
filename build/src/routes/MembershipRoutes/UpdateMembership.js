@@ -13,22 +13,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const Membeship_1 = __importDefault(require("../../models/Membeship"));
+const User_1 = __importDefault(require("../../models/User"));
 const router = (0, express_1.Router)();
-//* /membership
+//* /getmembership
 //! verifica token del admin
 //1.
 // Viene por query, ?name="nombre del plan"
 // si el usuario quiere cambiar de plan, actualiza el plan en su membership doc.
-// los nombres del plan pueden ser: Regular - Premium - sommelier
+// los nombres del plan pueden ser: regular - premium - sommelier
 //2.
 // Viene por query, ?isActive=false
 // si el usuario se quiere dar de baja del plan, actualiza el field isActive a false. Tambien se vacia el field membership_id en el User doc.
-//! hacer un post order si cambia el plan?? el post order es con cada pago?
 router.put("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
     try {
-        let updatedMembership;
         const user = req.user;
         //console.log("user", user);
         if (!user.isActive)
@@ -42,14 +39,10 @@ router.put("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
             return "missing data from query";
         }
         if (req.query.name) {
-            updatedMembership = yield Membeship_1.default.findByIdAndUpdate({ user_id: user._id }, { name: (_a = req.query) === null || _a === void 0 ? void 0 : _a.name, price: req.query.price }, { runValidators: true }).select("-user_id");
+            const updatedUserMembership = yield User_1.default.findByIdAndUpdate(user._id, { name: req.query.name }, { runValidators: true }).lean();
         }
-        ;
-        if (req.query.isActive) {
-            updatedMembership = yield Membeship_1.default.findByIdAndUpdate({ user_id: user._id }, { isActive: (_b = req.query) === null || _b === void 0 ? void 0 : _b.isActive }, { runValidators: true }).select("-user_id");
-        }
-        console.log("updatedMembership", updatedMembership);
-        return res.status(200).send(updatedMembership);
+        // const dbMembership:any = await MembershipModel.find(req.query).select("-user_id");
+        // return res.status(200).send(dbMembership)
     }
     catch (error) {
         return res.status(400).send({ error: error.message });

@@ -28,7 +28,6 @@ router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
             return res.status(303).send("Inactive user, do you want to recover it?");
         }
         const userMembership = yield User_1.default.find({ _id: user._id, isActive: true }).select("membership_id").populate('Membership').select("-user_id");
-        console.log("userMembership", userMembership);
         if (userMembership.isActive) {
             return res.status(200).send(userMembership);
         }

@@ -31,11 +31,11 @@ function verToken(req, res, next) {
             }
             catch (error) {
                 console.log(error);
-                res.status(403).send("Not authorized!");
+                throw new Error("Not authorized!");
             }
         }
         if (!token) {
-            res.status(401).send("No token!");
+            throw new Error("no token!");
         }
     });
 }

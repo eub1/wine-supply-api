@@ -19,15 +19,10 @@ const router = (0, express_1.Router)();
 router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const wineRecommended = yield (0, RecommendedWines_1.default)();
-        if (wineRecommended) {
-            res.send(wineRecommended);
-        }
-        else {
-            res.status(400).json({ message: "Not wines find" });
-        }
+        res.send(wineRecommended);
     }
     catch (error) {
-        res.status(500).send(error.message);
+        res.status(400).send(error.message);
     }
 }));
 exports.default = router;

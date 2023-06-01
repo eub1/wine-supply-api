@@ -13,11 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Review_1 = __importDefault(require("../../models/Review"));
-const postReview = (user_id, wine_id, username, comment, rating) => __awaiter(void 0, void 0, void 0, function* () {
+const postReview = (user_id, wine_id, comment, rating) => __awaiter(void 0, void 0, void 0, function* () {
     const newReview = new Review_1.default({
         user_id,
         wine_id,
-        username,
         comment,
         rating
     });

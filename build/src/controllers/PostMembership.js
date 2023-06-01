@@ -8,22 +8,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = require("express");
-const GetUserById_1 = __importDefault(require("../../../controllers/GetUserById"));
-const router = (0, express_1.Router)();
-router.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { id } = req.params;
-    try {
-        let user = yield (0, GetUserById_1.default)(id);
-        let newUser = Object.assign(Object.assign({}, user), { id: user === null || user === void 0 ? void 0 : user._id });
-        res.status(200).send(newUser);
+const postMembership = (user, body) => __awaiter(void 0, void 0, void 0, function* () {
+    const updatedUser = user;
+    console.log(body);
+    if (body.membership_id) {
+        const { isMember } = body.membership_id[0];
+        console.log(body.membership_id[0]);
+        if (user.membership_id.length === 0) {
+            user.membership_id.push({ isMember: true });
+        }
+        user.membership_id[0].isMember = isMember;
+        yield user.save();
+        return updatedUser;
     }
-    catch (error) {
-        res.status(404).send("Can't find user!");
+    for (const property in body) {
+        user[property] = body[property];
     }
-}));
-exports.default = router;
+    yield updatedUser.save();
+    return updatedUser;
+});

@@ -41,11 +41,11 @@ function verTokenPayment(req, res, next) {
             }
             catch (error) {
                 console.log(error);
-                res.status(300).send("Not authorized!");
+                throw new Error("Not authorized!");
             }
         }
         if (!token) {
-            res.status(303).send("no token!");
+            throw new Error("no token!");
         }
     });
 }

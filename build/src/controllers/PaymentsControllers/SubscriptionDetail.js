@@ -9,11 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const SubscriptionDetail = (data, id) => __awaiter(void 0, void 0, void 0, function* () {
+const SubscriptionDetail = (data) => __awaiter(void 0, void 0, void 0, function* () {
     switch (data) {
         case 'Regular': {
             return {
-                "reason": "Regular",
+                "reason": "Wine Club (Regular Subscription)",
                 "auto_recurring": {
                     "frequency": 1,
                     "frequency_type": "months",
@@ -22,14 +22,13 @@ const SubscriptionDetail = (data, id) => __awaiter(void 0, void 0, void 0, funct
                     "transaction_amount": 40,
                     "currency_id": "ARS"
                 },
-                "back_url": `https://wine-supply-back-production.up.railway.app/membershipcreateorder?user_id=${id}`
-                // "back_url": `https://google.com`
+                "back_url": "http://google.com"
             };
             break;
         }
         case 'Premium': {
             return {
-                "reason": "Premium",
+                "reason": "Wine Club (Premium Subscription)",
                 "auto_recurring": {
                     "frequency": 1,
                     "frequency_type": "months",
@@ -38,13 +37,13 @@ const SubscriptionDetail = (data, id) => __awaiter(void 0, void 0, void 0, funct
                     "transaction_amount": 60,
                     "currency_id": "ARS"
                 },
-                "back_url": `https://wine-supply-back-production.up.railway.app/membershipcreateorder?user_id=${id}`
+                "back_url": "http://google.com"
             };
             break;
         }
         case 'Sommeliere': {
             return {
-                "reason": "Sommeliere",
+                "reason": "Wine Club (Sommeliere Subscription)",
                 "auto_recurring": {
                     "frequency": 1,
                     "frequency_type": "months",
@@ -53,7 +52,7 @@ const SubscriptionDetail = (data, id) => __awaiter(void 0, void 0, void 0, funct
                     "transaction_amount": 80,
                     "currency_id": "ARS"
                 },
-                "back_url": `https://wine-supply-back-production.up.railway.app/membershipcreateorder?user_id=${id}`
+                "back_url": "http://google.com"
             };
             break;
         }

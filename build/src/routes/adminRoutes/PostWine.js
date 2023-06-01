@@ -48,7 +48,7 @@ router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(200).send(`${newWine.name} wine created successfully!`);
     }
     catch (error) {
-        res.status(400).send("wine not posted :c", error.message);
+        res.status(400).send(error.message);
     }
 }));
 exports.default = router;

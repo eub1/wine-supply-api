@@ -25,22 +25,21 @@ router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             { strain: regexContainInsensitive },
             { brand: regexContainInsensitive },
             { type: regexContainInsensitive },
-        ]
+        ],
+        isActive: true
     };
     try {
         if (input) {
             const filteredWines = yield Wine_1.default.find(filters).select("_id name brand type description cropYear strain volume images rating price");
             if (filteredWines.length === 0) {
-                res.status(404).json({ message: "No matches found" });
+                throw new Error("No matches found");
             }
-            else {
-                res.send(filteredWines);
-            }
+            return res.send(filteredWines);
         }
-        return res.send("No data send by query");
+        return res.send("No se enviaron datos por query");
     }
     catch (error) {
-        res.status(500).send(error.message);
+        res.status(400).send(error.message);
     }
 }));
 exports.default = router;

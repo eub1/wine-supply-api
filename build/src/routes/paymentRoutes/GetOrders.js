@@ -25,8 +25,8 @@ router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         return res.status(300).send('No shopping orders present!');
     }
-    catch (error) {
-        res.status(400).json(error.message);
+    catch (err) {
+        console.log(err);
     }
 }));
 exports.default = router;

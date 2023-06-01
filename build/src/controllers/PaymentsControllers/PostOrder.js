@@ -14,41 +14,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const ShoppingOrder_1 = __importDefault(require("../../models/ShoppingOrder"));
 const User_1 = __importDefault(require("../../models/User"));
-const ConfirmPayment_1 = __importDefault(require("../Mails/ConfirmPayment"));
+const ResetCart_1 = __importDefault(require("./ResetCart"));
 const postOrder = (response, data) => __awaiter(void 0, void 0, void 0, function* () {
+    const { name, lastName, user_id, country, state_name, city_name, zip_code, street_name, street_number, floor, apartment } = response;
+    const newOrder = new ShoppingOrder_1.default({
+        user_id,
+        user: `${lastName}, ${name}`,
+        order_address: `${country}, ${state_name}, ${city_name} (${zip_code}), ${street_name} ${street_number}, floor: ${floor}, apartment: ${apartment}`,
+        items: data.body.items,
+        orderDate: Date.now(),
+        payment: "Mercado Pago",
+        shippingMethod: 'Correo',
+        orderTotal: data.body.total_amount,
+        orderStatus: 1 //mercadopago devuelve un string
+    });
+    const createdOrder = yield newOrder.save();
     try {
-        const { user_id } = response;
-        const order_user = yield User_1.default.findById(user_id);
-        const address = "userAdress";
-        // let address;
-        // for (const ind_address of order_user?.address) {
-        //     if (ind_address.isDefault === true) {
-        //         address = ind_address
-        //     }
-        // }
-        // const { country, stateName, cityName, postalCode, streetName, streetNumber, floor, apartment } = address
-        const newOrder = new ShoppingOrder_1.default({
-            user_id,
-            user: `${order_user.lastName}, ${order_user.name}`,
-            // order_address: `${country}, ${stateName}, ${cityName} (${postalCode}), ${streetName} ${streetNumber}, floor: ${floor}, apartment: ${apartment}`,
-            order_address: `adress`,
-            items: data.body.items,
-            orderDate: Date.now(),
-            payment: "Mercado Pago",
-            shippingMethod: 'Correo',
-            orderTotal: data.body.total_amount,
-            orderStatus: 1 //mercadopago devuelve un string
-        });
-        // const mail = await confirmPayment( "Wine purchase", address, order_user, data.body.total_amount);
-        const mail = yield (0, ConfirmPayment_1.default)("Wine purchase", order_user, data.body.total_amount);
-        console.log(mail);
-        const createdOrder = yield newOrder.save();
-        order_user.order.push(createdOrder._id);
-        order_user.shopping_cart = [];
-        order_user.save();
+        const order_user = yield User_1.default.findOneAndUpdate({ _id: user_id }, { $push: { order: createdOrder._id } });
+        const updatedUser = order_user === null || order_user === void 0 ? void 0 : order_user.save();
     }
-    catch (error) {
-        throw new Error(error);
+    catch (err) {
+        console.log(err);
+    }
+    if (data.body.items[0].description === "cart") {
+        (0, ResetCart_1.default)(user_id);
     }
 });
 exports.default = postOrder;

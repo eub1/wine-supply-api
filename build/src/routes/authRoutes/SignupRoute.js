@@ -14,26 +14,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const PostUser_1 = __importDefault(require("../../controllers/PostUser"));
-const WelcomeMail_1 = __importDefault(require("../../controllers/Mails/WelcomeMail"));
 // import bcrypt from "bcrypt"
 const bcrypt = require("bcrypt");
 const router = (0, express_1.Router)();
 //* /signup
 router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let { name, lastName, userName, email, password } = req.body;
+    console.log(name, lastName, userName, email, password);
+    const hashedPass = yield bcrypt.hash(password, 10);
     try {
-        let { name, lastName, userName, email, password } = req.body;
-        const hashedPass = yield bcrypt.hash(password, 10);
         const newUser = yield (0, PostUser_1.default)(name, lastName, userName, email, hashedPass);
-        try {
-            const mail = yield (0, WelcomeMail_1.default)(newUser.email);
-        }
-        catch (error) {
-            res.status(400).json({ message: "Unable to sign up", error });
-        }
         res.status(200).send(`${newUser.name} user created successfully!`);
     }
     catch (error) {
-        res.status(400).send("Can't create user!");
+        res.status(400).send(error);
     }
 }));
 /* AGREGAR VALIDACIONES A FUTURO */

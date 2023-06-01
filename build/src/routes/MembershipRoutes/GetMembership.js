@@ -15,8 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const Membeship_1 = __importDefault(require("../../models/Membeship"));
 const router = (0, express_1.Router)();
-//* /membership?name=
-// Regular - Premium - Sommielere
+//* /getmembership
 //! verifica token del admin
 // busca en el model de membership segun los fields que vengan por query
 router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {

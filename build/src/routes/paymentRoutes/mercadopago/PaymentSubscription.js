@@ -22,27 +22,20 @@ const router = (0, express_1.Router)();
 router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, lastName, phone, _id } = req.user;
     let id = _id.toString();
-    // let address1;
-    // for (const address of req.user.address) {
-    //     if (address.isDefault === true) {
-    //         address1 = address
-    //     }
-    // }
-    // if (!address1) {
-    //     return res.status(400).send("Address not found!")
-    // }
-    try {
-        // const {country, stateName, cityName, postalCode, streetName, streetNumber, floor, Apartment} = address1
-        if (req.sub_type) {
-            const data = req.sub_type;
-            let subscription = yield (0, PaymentSubCreate_1.default)(data, id);
-            // console.log("subscription",subscription);
-            return res.status(200).send(subscription.data.init_point);
+    let address1;
+    for (const address of req.user.address) {
+        if (address.isDefault === true) {
+            address1 = address;
         }
     }
-    catch (error) {
-        console.log(error);
-        return res.status(300).send('No subscription info received!');
+    if (!address1) {
+        return res.status(400).send("Address not found!");
+    }
+    const { country, stateName, cityName, postalCode, streetName, streetNumber, floor, Apartment } = address1;
+    if (req.sub_type) {
+        const id = req.sub_type;
+        let subscription = yield (0, PaymentSubCreate_1.default)(id);
+        res.status(200).send(subscription.data.init_point);
     }
 }));
 exports.default = router;

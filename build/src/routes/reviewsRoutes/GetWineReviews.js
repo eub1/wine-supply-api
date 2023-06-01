@@ -15,13 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const GetWineReviews_1 = __importDefault(require("../../controllers/ReviewsControllers/GetWineReviews"));
 const router = (0, express_1.Router)();
-router.get("/:wine_id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { wine_id } = req.params;
+router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { wine_id } = req.body;
     try {
-        const review = (yield (0, GetWineReviews_1.default)(wine_id)) || null;
-        if (!review)
-            res.status(404).json({ message: "Wine has not reviews" });
-        res.status(200).json(review);
+        const review = yield (0, GetWineReviews_1.default)(wine_id);
+        res.send(review);
     }
     catch (error) {
         res.status(400).send(error);

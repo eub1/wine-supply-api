@@ -21,15 +21,10 @@ router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const wines = yield (0, GetAllWines_1.default)();
         const fWines = (0, FilterAllWines_1.default)(wines);
-        if (fWines) {
-            res.send(fWines);
-        }
-        else {
-            res.status(400).json({ message: "Not wines find" });
-        }
+        res.send(fWines);
     }
     catch (error) {
-        res.status(500).json({ message: "Server error :c \n", error });
+        throw new Error(error);
     }
 }));
 exports.default = router;

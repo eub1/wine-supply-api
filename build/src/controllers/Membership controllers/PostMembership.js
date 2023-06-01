@@ -12,18 +12,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = require("express");
-const Wine_1 = __importDefault(require("../../../models/Wine"));
-const router = (0, express_1.Router)();
-//* /admin/wines
-router.delete("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { id } = req.params;
-    try {
-        let wine = yield Wine_1.default.findByIdAndUpdate(id, { isActive: false });
-        res.status(201).send(`${wine === null || wine === void 0 ? void 0 : wine.name} succesfully suspended!`);
-    }
-    catch (error) {
-        return res.status(404).send('Cant delete wine!');
-    }
-}));
-exports.default = router;
+const Membeship_1 = __importDefault(require("../../models/Membeship"));
+const User_1 = __importDefault(require("../../models/User"));
+const postMembership = (response, user) => __awaiter(void 0, void 0, void 0, function* () {
+    const { name, price } = response;
+    const newMembership = new Membeship_1.default({
+        name,
+        price,
+        user_id: user._id,
+        isActive: true
+    });
+    yield newMembership.save();
+    const getUser = yield User_1.default.findById(user._id);
+    getUser === null || getUser === void 0 ? void 0 : getUser.membership_id.concat(newMembership._id);
+    return newMembership;
+});
+exports.default = postMembership;
