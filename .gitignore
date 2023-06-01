@@ -9,6 +9,3 @@ package-lock.json
 
 # TypeScript cache
 *.tsbuildinfo
-
-# build
-build
