@@ -23,45 +23,53 @@ mercadopago.configure({
     access_token: process.env.ACCESS_TOKEN_MP,
 });
 router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, lastName, phone, _id } = req.user;
+    const { _id } = req.user;
     let id = _id.toString();
     let address1;
-    for (const address of req.user.address) {
-        if (address.isDefault === true) {
-            address1 = address;
+    // for (const address of req.user.address) {
+    //     if (address.isDefault === true) {
+    //         address1 = address
+    //     }
+    // }
+    // if (!address1) {
+    //     return res.status(400).send("Address not found!")
+    // }
+    //wine-supply-back-production.up.railway.app
+    try {
+        if (req.item) {
+            const item = req.item;
+            let items = yield (0, PaymentCreate_1.default)(item);
+            let preference = {
+                auto_return: "approved",
+                back_urls: {
+                    success: `https://localhost:3001/createorder?user_id=${id}`,
+                },
+                items,
+                // notification_url : 'http://localhost:3001/notificar'
+            };
+            const pruebaMercadoPago = yield mercadopago.preferences.create(preference);
+            return res.send(pruebaMercadoPago.body.init_point);
+        }
+        if (req.body) {
+            console.log(req.user);
+            const cart = req.user.shopping_cart;
+            let items = yield (0, PaymentCreate_1.default)(cart);
+            let preference = {
+                auto_return: "approved",
+                back_urls: {
+                    success: `https://localhost:3001/createorder?user_id=${id}`,
+                },
+                items,
+                // notification_url : 'http://localhost:3001/notificar'
+            };
+            const pruebaMercadoPago = yield mercadopago.preferences.create(preference);
+            return res.send(pruebaMercadoPago.body.init_point);
         }
     }
-    if (!address1) {
-        return res.status(400).send("Address not found!");
+    catch (error) {
+        console.log(error);
+        return res.status(400).send("Error in payment creation!");
     }
-    const { country, stateName, cityName, postalCode, streetName, streetNumber, floor, Apartment } = address1;
-    if (req.shoppingCart) {
-        const cart = req.shoppingCart;
-        let items = yield (0, PaymentCreate_1.default)(cart);
-        let preference = {
-            auto_return: 'approved',
-            back_urls: {
-                success: `https://wine-supply-back-production.up.railway.app/createorder?name=${name}&lastName=${lastName}&user_id=${id}&country=${country}&state_name=${stateName}&city_name=${cityName}&zip_code=${postalCode}&street_name=${streetName}&street_number=${streetNumber}&floor=${floor}&apartment=${Apartment}`
-            },
-            items
-            // notification_url : 'http://localhost:3001/notificar'
-        };
-        const pruebaMercadoPago = yield mercadopago.preferences.create(preference);
-        res.send(pruebaMercadoPago.body.init_point);
-    }
-    if (req.item) {
-        const item = req.item;
-        let items = yield (0, PaymentCreate_1.default)(item);
-        let preference = {
-            auto_return: 'approved',
-            back_urls: {
-                success: `https://wine-supply-back-production.up.railway.app/createorder?name=${name}&lastName=${lastName}&user_id=${id}&country=${country}&state_name=${stateName}&city_name=${cityName}&zip_code=${postalCode}&street_name=${streetName}&street_number=${streetNumber}&floor=${floor}&apartment=${Apartment}`
-            },
-            items
-            // notification_url : 'http://localhost:3001/notificar'
-        };
-        const pruebaMercadoPago = yield mercadopago.preferences.create(preference);
-        res.send(pruebaMercadoPago.body.init_point);
-    }
+    res.status(300).send("No items received!");
 }));
 exports.default = router;

@@ -16,7 +16,7 @@ const express_1 = require("express");
 const PutReview_1 = __importDefault(require("../../controllers/ReviewsControllers/PutReview"));
 const Updaterating_1 = __importDefault(require("../../controllers/ReviewsControllers/Updaterating"));
 const router = (0, express_1.Router)();
-router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.put("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { review_id, wine_id, comment, rating } = req.body;
     if (typeof comment !== "string" || typeof rating !== "number")
         return res.status(400).send("Invalid data");
@@ -26,12 +26,16 @@ router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!validate)
         return res.status(400).send(`Missing data!`);
     try {
-        const newReview = yield (0, PutReview_1.default)(review_id, comment, rating);
-        const update = yield (0, Updaterating_1.default)(wine_id);
-        res.status(200).send(`Review edited successfully!`);
+        const newReview = (yield (0, PutReview_1.default)(review_id, comment, rating)) || null;
+        const update = (yield (0, Updaterating_1.default)(wine_id)) || null;
+        if (!newReview || !update)
+            res.status(400).json({ message: `Somenthing went wrong, review not updated!` });
+        else {
+            res.status(200).json({ message: `Review edited successfully!` });
+        }
     }
     catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json(error.message);
     }
 }));
 exports.default = router;

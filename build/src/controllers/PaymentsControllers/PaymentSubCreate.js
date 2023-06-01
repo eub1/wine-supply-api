@@ -16,13 +16,19 @@ const axios_1 = __importDefault(require("axios"));
 const SubscriptionDetail_1 = __importDefault(require("./SubscriptionDetail"));
 const dotenv_1 = require("dotenv");
 (0, dotenv_1.config)();
-const PaymentSubCreate = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    let sub = yield (0, SubscriptionDetail_1.default)(data);
-    let subscription = JSON.stringify(sub);
-    let response = yield axios_1.default.post('https://api.mercadopago.com/preapproval_plan', subscription, { headers: {
-            'Authorization': 'Bearer ' + process.env.ACCESS_TOKEN_MP,
-            'Content-Type': 'application/json'
-        } });
-    return response;
+const PaymentSubCreate = (data, id) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let sub = yield (0, SubscriptionDetail_1.default)(data, id);
+        let subscription = JSON.stringify(sub);
+        let response = yield axios_1.default.post('https://api.mercadopago.com/preapproval_plan', subscription, { headers: {
+                'Authorization': 'Bearer ' + process.env.ACCESS_TOKEN_MP,
+                'Content-Type': 'application/json'
+            } });
+        return response;
+    }
+    catch (error) {
+        console.log(error);
+        throw new Error(error);
+    }
 });
 exports.default = PaymentSubCreate;

@@ -16,7 +16,10 @@ const Wine_1 = __importDefault(require("../models/Wine"));
 const getWineById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const wine = yield Wine_1.default.findById(id);
-        return wine;
+        if (!wine)
+            return null;
+        else
+            return wine;
     }
     catch (error) {
         throw new Error(error);

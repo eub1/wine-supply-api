@@ -19,40 +19,42 @@ const CloudinaryDestroy_1 = __importDefault(require("../../controllers/Cloudinar
 const fs_extra_1 = __importDefault(require("fs-extra"));
 //* /user/update
 router.put("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
     const { avatarID } = req.body;
     try {
         const user = req.user;
         //console.log("user", user);
-        if (!user.isActive)
-            return res.status(303).send("Inactive user, do you want to recover it?");
         if (!user) {
             return res.status(404).send("User not found!");
         }
-        if (Object.keys(req.body).length) {
-            //!!Update Avatar
-            if (((_a = req.files) === null || _a === void 0 ? void 0 : _a.image) && avatarID) {
-                //* Preguta si hay imagen y ID para el procedimiento
-                const destroy = yield (0, CloudinaryDestroy_1.default)(avatarID); //* Elimina imagen anterior
-                result = yield (0, Cloudinary_1.default)(req.files.images.tempFilePath, "Users"); //* Guarda imagen folder "Users" y devuelve info
-                yield fs_extra_1.default.unlink(req.files.images.tempFilePath); //* Elimina imagen del servidor de Node.js
-                req.body.avatar = [
-                    //* Coloca rutas en la propieda imagen
-                    result.secure_url,
-                    result.public_id //Id de la imagen
-                ];
-            }
-            else {
-                console.log("Image or old-avatarID not provided");
-            }
-            //!!Update Image END
+        if (user.isActive) {
             const updatedUser = yield (0, UpdateUser_1.default)(user, req.body);
             return res.status(200).send(updatedUser);
         }
-        return res.status(400).send({ error: "No parameters sent for update" });
+        else
+            return res.status(303).send("Inactive user, do you want to recover it?");
     }
     catch (error) {
         return res.status(400).send({ error: error.message });
     }
+    // if (Object.keys(req.body).length) {
+    // 	//!!Update Avatar
+    // 	if (req.files?.image && avatarID) {
+    // 		//* Preguta si hay imagen y ID para el procedimiento
+    // 		const destroy = await destroyImg(avatarID); //* Elimina imagen anterior
+    // 		result = await upLoadImg(req.files.images.tempFilePath, "Users"); //* Guarda imagen folder "Users" y devuelve info
+    // 		await fs.unlink(req.files.images.tempFilePath); //* Elimina imagen del servidor de Node.js
+    // 		req.body.avatar = [
+    // 			//* Coloca rutas en la propieda imagen
+    // 			result.secure_url, //Direccion de la imagen
+    // 			result.public_id //Id de la imagen
+    // 		];
+    // 	} else {
+    // 		console.log("Image or old-avatarID not provided");
+    // 	}
+    // 	//!!Update Image END
+    // 	const updatedUser = await updateUser(user, req.body);
+    // 	return res.status(200).send(updatedUser);
+    // }
+    // return res.status(400).send({ error: "No parameters sent for update" });
 }));
 exports.default = router;

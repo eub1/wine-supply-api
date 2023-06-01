@@ -19,10 +19,11 @@ router.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     let { id } = req.params;
     try {
         const wine = yield (0, GetWineById_1.default)(id);
+        console.log(wine);
         res.send(wine);
     }
     catch (error) {
-        throw new Error(error);
+        res.status(404).json({ message: "Not wine find with the id:" + id });
     }
 }));
 exports.default = router;

@@ -16,17 +16,17 @@ const express_1 = require("express");
 const DeleteReview_1 = __importDefault(require("../../controllers/ReviewsControllers/DeleteReview"));
 const Updaterating_1 = __importDefault(require("../../controllers/ReviewsControllers/Updaterating"));
 const router = (0, express_1.Router)();
-router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { user_id, wine_id } = req.body;
+router.delete("/:user_id/:wine_id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { user_id, wine_id } = req.params;
     try {
-        const review = yield (0, DeleteReview_1.default)(user_id, wine_id);
+        const review = (yield (0, DeleteReview_1.default)(user_id, wine_id)) || null;
         if (!review)
             return res.status(404).send("No review to delete");
-        res.status(200).send(`Review deleted successfully!`);
+        res.status(200).json({ message: `Review deleted successfully!` });
         const update = yield (0, Updaterating_1.default)(wine_id);
     }
     catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json(error.message);
     }
 }));
 exports.default = router;

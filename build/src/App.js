@@ -20,3 +20,11 @@ exports.app.use((0, cors_1.default)({
     origin: "*",
 }));
 exports.app.use('/', Index_1.default);
+exports.app.get('/test', (req, res) => {
+    try {
+        res.send('Hello World');
+    }
+    catch (error) {
+        console.log(error.message);
+    }
+});

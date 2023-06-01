@@ -34,6 +34,7 @@ const PaymentCreate = (data) => __awaiter(void 0, void 0, void 0, function* () {
         }
         catch (error) {
             console.log(error);
+            throw new Error(error);
         }
     }
     if (data) {
@@ -45,7 +46,7 @@ const PaymentCreate = (data) => __awaiter(void 0, void 0, void 0, function* () {
                     description: "cart",
                     unit_price: e.price,
                     // picture_url: e.images[0],
-                    quantity: 1,
+                    quantity: e.cuantity,
                     currency_id: "ARS"
                 });
             });
@@ -53,6 +54,7 @@ const PaymentCreate = (data) => __awaiter(void 0, void 0, void 0, function* () {
         }
         catch (error) {
             console.log(error);
+            throw new Error(error);
         }
     }
 });

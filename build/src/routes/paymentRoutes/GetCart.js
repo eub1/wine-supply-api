@@ -19,14 +19,14 @@ const router = (0, express_1.Router)();
 router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req.user._id;
     try {
-        let user = yield User_1.default.findById(userId, 'shopping_cart').populate('shopping_cart');
+        let user = yield User_1.default.findById(userId, 'shopping_cart');
         if ((user === null || user === void 0 ? void 0 : user.shopping_cart.length) > 0) {
             return res.status(200).json(user === null || user === void 0 ? void 0 : user.shopping_cart);
         }
         return res.status(300).send('No items in the shopping cart!');
     }
-    catch (err) {
-        console.log(err);
+    catch (error) {
+        res.status(400).json(error.message);
     }
 }));
 exports.default = router;

@@ -23,7 +23,7 @@ const UserSchema = new Schema({
         { type: mongoose_1.default.Types.ObjectId, ref: "Membership" },
     ],
     address: [{}],
-    shopping_cart: [{ type: mongoose_1.default.Types.ObjectId, ref: "Wine" }],
+    shopping_cart: { type: [Object] },
     order: [{ type: mongoose_1.default.Types.ObjectId, ref: "ShoppingOrder" }],
     whishList: [{ type: mongoose_1.default.Types.ObjectId, ref: "Wine" }]
 }, { timestamps: true });

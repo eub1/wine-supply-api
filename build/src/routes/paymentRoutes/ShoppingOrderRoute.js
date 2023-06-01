@@ -15,13 +15,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const mercadopago = require('mercadopago');
 const PostOrder_1 = __importDefault(require("../../controllers/PaymentsControllers/PostOrder"));
+const User_1 = __importDefault(require("../../models/User"));
 const router = (0, express_1.Router)();
 // */ /createorder
 router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const response = req.query;
-    const orderShopId = response.merchant_order_id;
-    const data = yield mercadopago.merchant_orders.findById(orderShopId);
-    (0, PostOrder_1.default)(response, data);
-    res.redirect('https://exquisite-brigadeiros-cc493c.netlify.app/');
+    try {
+        const response = req.query; // id - orderShopId (es de mercado pago)
+        const orderShopId = response.merchant_order_id;
+        const data = yield mercadopago.merchant_orders.findById(orderShopId);
+        (0, PostOrder_1.default)(response, data);
+        const user = yield User_1.default.findById(response.user_id);
+        return res.redirect(`https://voluble-hummingbird-3fb9b1.netlify.app/user/${user === null || user === void 0 ? void 0 : user.name}/profile`);
+        // 'http://localhost:3000/home/products'
+    }
+    catch (error) {
+        console.log(error);
+        return res.status(400).send("Couldn't generate order!");
+    }
 }));
 exports.default = router;

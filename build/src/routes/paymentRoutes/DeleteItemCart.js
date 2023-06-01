@@ -21,8 +21,8 @@ router.delete("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             req.user.save();
             return res.status(200).send('Wine deleted!');
         }
-        catch (err) {
-            console.log(err);
+        catch (error) {
+            res.status(400).json({ message: "Something bad happend", error });
         }
     }
     return res.status(300).send('No items in the shopping cart!');
