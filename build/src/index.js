@@ -12,6 +12,7 @@ mongoose_1.default
     .connect(process.env.MONGO_URL)
     .then(() => {
     console.log(`Listening on port ${PORT}`);
+    console.log("New clog");
     App_1.app.listen(PORT);
 })
     .catch((error) => {
